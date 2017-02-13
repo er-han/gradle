@@ -46,6 +46,7 @@ import org.gradle.performance.fixture.PerformanceTestGradleDistribution
 import org.gradle.performance.fixture.PerformanceTestJvmOptions
 import org.gradle.performance.fixture.TestProjectLocator
 import org.gradle.performance.fixture.TestScenarioSelector
+import org.gradle.performance.measure.MeasuredOperation
 import org.gradle.performance.results.BuildDisplayInfo
 import org.gradle.performance.results.CrossVersionPerformanceResults
 import org.gradle.performance.results.CrossVersionResultsStore
@@ -255,6 +256,7 @@ abstract class AbstractToolingApiCrossVersionPerformanceTest extends Specificati
         }
 
         private void warmup(toolingApi, File workingDir) {
+            OperationTimer timer = new OperationTimer()
             experimentSpec.with {
                 def count = iterationCount("warmups", warmUpCount)
                 count.times { n ->
@@ -263,9 +265,11 @@ abstract class AbstractToolingApiCrossVersionPerformanceTest extends Specificati
                         experimentSpec.listener.beforeInvocation(info)
                     }
                     println "Warm-up #${n + 1}"
-                    toolingApi.withConnection(action)
+                    def measuredOperation = timer.measure {
+                        toolingApi.withConnection(action)
+                    }
                     if (experimentSpec.listener) {
-                        experimentSpec.listener.afterInvocation(info, null, null)
+                        experimentSpec.listener.afterInvocation(info, measuredOperation, null)
                     }
                 }
             }
