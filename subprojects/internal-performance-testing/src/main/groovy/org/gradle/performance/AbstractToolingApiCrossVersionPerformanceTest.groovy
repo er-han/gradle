@@ -46,7 +46,6 @@ import org.gradle.performance.fixture.PerformanceTestGradleDistribution
 import org.gradle.performance.fixture.PerformanceTestJvmOptions
 import org.gradle.performance.fixture.TestProjectLocator
 import org.gradle.performance.fixture.TestScenarioSelector
-import org.gradle.performance.measure.MeasuredOperation
 import org.gradle.performance.results.BuildDisplayInfo
 import org.gradle.performance.results.CrossVersionPerformanceResults
 import org.gradle.performance.results.CrossVersionResultsStore
